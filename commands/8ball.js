@@ -2,10 +2,6 @@ const Discord = require('discord.js');
 
 exports.run = (client, message, args) => {
 
-    const own = require('../../Data/config.json');
-
-    const ownerb = client.users.get(own.ffd.autheur)
-
     let rep = [
         "Non",
         "Euuuh, enfaite tes qui ?",
@@ -33,7 +29,6 @@ exports.run = (client, message, args) => {
         .setAuthor(message.author.tag, message.author.avatarURL)
         .addField('**__Question :__**', question)
         .addField('**__Réponse :__**', rep[Math.floor(Math.random() * rep.length)])
-        .setFooter('Développé par ' + ownerb.username, ownerb.avatarURL)
     message.channel.send(ball_embed)
 
 };
