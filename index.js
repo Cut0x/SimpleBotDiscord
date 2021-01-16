@@ -57,13 +57,13 @@ client.on('message', async message => {
 
 client.on('guildCreate', function (guild) {
 
-    const chans = client.guilds.get('id_serveur').channels.get('id_salon_vocal')
+    const chans = client.guilds.cache.get('id_serveur').channels.cache.get('id_salon_vocal')
 
-    const chan = client.guilds.get('id_serveur').channels.get('id_salon_textuel')
+    const chan = client.guilds.cache.get('id_serveur').channels.cache.get('id_salon_textuel')
 
-    const embed = new Discord.RichEmbed()
+    const embed = new Discord.MessageEmbed()
         .setColor('GREEN')
-        .setAuthor('Serveur en plus !', guild.iconURL)
+        .setAuthor('Serveur en plus !', guild.iconURL({ dynamic: true }))
         .setThumbnail(guild.iconURL)
         .addField('> **__Serveur Name :__**', '```fix' + '\n' + guild.name + '\n' + '```', true)
         .addField('> **__Serveur ID :__**', '```js' + '\n' + guild.id + '\n' + '```', true)
@@ -75,18 +75,18 @@ client.on('guildCreate', function (guild) {
         .addField('> **__Owner ID :__**', '```js' + '\n' + guild.owner.id + '\n' + '```', true)
     chan.send(embed)
 
-    chans.setName(`Serveurs : ${client.guilds.size}`)
+    chans.setName(`Serveurs : ${client.guilds.cache.size}`)
 });
 
 client.on('guildDelete', function (guild) {
 
-    const chans = client.guilds.get('id_serveur').channels.get('id_salon_vocal')
+    const chans = client.guilds.cache.get('id_serveur').channels.cache.get('id_salon_vocal')
 
-    const chan = client.guilds.get('id_serveur').channels.get('id_salon_textuel')
+    const chan = client.guilds.cache.get('id_serveur').channels.cache.get('id_salon_textuel')
 
-    const embed = new Discord.RichEmbed()
+    const embed = new Discord.MessageEmbed()
         .setColor('RED')
-        .setAuthor('Serveur en moins !', guild.iconURL)
+        .setAuthor('Serveur en moins !', guild.iconURL({ dynamic: true }))
         .setThumbnail(guild.iconURL)
         .addField('> **__Serveur Name :__**', '```fix' + '\n' + guild.name + '\n' + '```', true)
         .addField('> **__Serveur ID :__**', '```js' + '\n' + guild.id + '\n' + '```', true)
@@ -98,5 +98,5 @@ client.on('guildDelete', function (guild) {
         .addField('> **__Owner ID :__**', '```js' + '\n' + guild.owner.id + '\n' + '```', true)
     chan.send(embed)
 
-    chans.setName(`Serveurs : ${client.guilds.size}`)
+    chans.setName(`Serveurs : ${client.guilds.cache.size}`)
 });
