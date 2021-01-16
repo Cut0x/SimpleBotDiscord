@@ -29,9 +29,8 @@ module.exports.run = async (client, message) => {
         .addField('** **', sondage)
     const msg = await message.channel.send(sondage_embed)
 	Promise.all([
-		message.react('🍎'),
-		message.react('🍊'),
-		message.react('🍇'),
+		msg.react('👍'),
+		msg.react('👎'),
 	])
     .catch(() => message.channel.send("Une erreur est survenue.");
 }
