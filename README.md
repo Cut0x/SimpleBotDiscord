@@ -15,4 +15,5 @@ Il y a dans ce template :
 Le tempalte du bot est désormais en v12.
 
 `RichEmbed` => `MessageEmbed`
+
 `guilds.size` => `guilds.cache.size` *pareil pour le reste.*
