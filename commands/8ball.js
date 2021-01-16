@@ -24,9 +24,9 @@ exports.run = (client, message, args) => {
     let question = args.slice(0).join(" ")
     if (!args[0]) return message.channel.send('<:nonvalide:723231678075502693> Tu doit me poser une question.')
 
-    const ball_embed = new Discord.RichEmbed()
+    const ball_embed = new Discord.MessageEmbed()
         .setColor('#e9d9d9')
-        .setAuthor(message.author.tag, message.author.avatarURL)
+        .setAuthor(message.author.tag, message.author.avatarURL({ dynamic: true }))
         .addField('**__Question :__**', question)
         .addField('**__Réponse :__**', rep[Math.floor(Math.random() * rep.length)])
     message.channel.send(ball_embed)
