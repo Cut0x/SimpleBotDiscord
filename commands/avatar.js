@@ -18,11 +18,11 @@ exports.run = (client, message, args) => {
         getuseravatar(user);
     }
     function getuseravatar(user) {
-        var embed = new Discord.RichEmbed()
+        var embed = new Discord.MessageEmbed()
             .setTitle(`Avatar de ${user.username}`)
             .setColor("#e9d9d9")
-            .setDescription(`[URL de l'avatar](${user.avatarURL})`)
-            .setImage(user.avatarURL)
+            .setDescription(`[URL de l'avatar](${user.avatarURL({ dynamic: true })})`)
+            .setImage(user.avatarURL({ dynamic: true }))
         message.channel.send(embed)
     } 
 };
