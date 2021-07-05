@@ -1,61 +1,49 @@
-const Discord = require('discord.js');
-const client = new Discord.Client();
-const fs = require('fs');
-const os = require('os')
-const cpuStat = require("cpu-stat");
-const moment = require("moment")
-client.commands = new Discord.Collection()
+const { Client, Collection, MessageEmbed } = require('discord.js');
+const { token, prefix } = require('./setting_bot');
 
-fs.readdir('./commands/', (err, files) => {
-    if(err) console.log(err);
-    console.log(`${files.length} commandes`);
-    let jsfile = files.filter(f => f.split(".").pop() === "js")
-    if(jsfile.length <= 0){
-        console.log('Aucune commandes trouvé.');
-        return;
-    }
+const client = new Client();
+client.commands = new Collection();
 
-    jsfile.forEach((f, i) => {
-        let props = require(`./commands/${f}`);
-        client.commands.set(props.help.name, props);
-    })
+const { readdirSync } = require("fs");
+
+
+const commandFiles = readdirSync('./commands').filter(file => file.endsWith('.js'));
+const eventFiles = readdirSync('./events').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+    
+	client.commands.set(command.name, command);
+}
+
+for (const file of eventFiles) {
+	const event = require(`./events/${file}`);
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args, client));
+	} else {
+		client.on(event.name, (...args) => event.execute(...args, client));
+	}
+}
+
+client.on('message', message => {
+	if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+	const args = message.content.slice(prefix.length).trim().split(/ +/);
+	const command = args.shift().toLowerCase();
+
+	if (!client.commands.has(command)) return;
+
+	try {
+		client.commands.get(command).execute(client, message, args);
+	} catch (error) {
+		console.error(error);
+		message.reply('Une erreur lors de l\'execution de la commande demandé est survenue ! :x:');
+	}
 });
 
-client.on('ready', () => {
-    console.log("+------------------------------------+")
-    console.log(`|         Connecté sur Discord       |`)
-    console.log("|         Prêt à être utilisé !      |")
-    console.log("+------------------------------------+")
-    console.log("|            Créé par Cut0x          |")
-    console.log("|         ID 574544938440851466      |")
-    console.log("+------------------------------------+")
+client.login(token);
 
-    client.user.setActivity(`!help`, {
-        type: "STREAMING",
-        url: "https://www.twitch.tv/cut0x"
-    })
-});
-
-const config = require('./config.json');
-
-client.login(config.token);
-
-client.on('message', async message => {
-
-    let prefix = "!";
-
-    let messageArray = message.content.split(" ");
-    let cmd = messageArray[0];
-    let Args = messageArray.slice(1);
-    var args = message.content.substring(prefix.length).split(" ");
-
-    if(message.content.startsWith(prefix)){
-        let commandeFile = client.commands.get(cmd.slice(prefix.length));
-        if(commandeFile) commandeFile.run(client, message, Args, args)
-    }
-})
-
-client.on('guildCreate', function (guild) {
+/*client.on('guildCreate', function (guild) {
 
     const chans = client.guilds.cache.get('id_serveur').channels.cache.get('id_salon_vocal')
 
@@ -99,4 +87,4 @@ client.on('guildDelete', function (guild) {
     chan.send(embed)
 
     chans.setName(`Serveurs : ${client.guilds.cache.size}`)
-});
+});*/
